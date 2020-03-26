@@ -1,0 +1,3 @@
+rootProject.name='QuranClassTest'
+include ':app'
+include ':quranbinary'
