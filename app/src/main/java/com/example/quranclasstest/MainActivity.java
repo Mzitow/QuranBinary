@@ -11,27 +11,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> quranVerse;
+    ArrayList<Character> quranChar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        quranVerse = new ArrayList<>();
+        quranChar = new ArrayList<>();
 
         QuranData data = new QuranData(this);
+        quranChar = data.getQuranCharacters();
 
-        int verses = data.getQuranVerses().size();
-        int characters = data.getQuranCharacters().size();
+        int size = quranChar.size();
 
-        quranVerse = data.getQuranVerses();
-        String verse100 = quranVerse.get(100);
-
-        Toast.makeText(this, verse100, Toast.LENGTH_LONG).show();
-
-
-
+        Toast.makeText(this, "No of Char: " + size, Toast.LENGTH_LONG).show();
 
     }
 }

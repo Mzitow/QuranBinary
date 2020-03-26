@@ -1,20 +1,19 @@
+
+//In the Name of Allah Most Gracious Most Merciful
+
 package com.example.quranbinary;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class QuranData {
 
@@ -28,7 +27,6 @@ public class QuranData {
            read new line()
                 add the characters of the current Line into the quranCharacters
      }
-
      return the characterList, its size
      return the versesList, its size
      should all happen in the constructor
@@ -38,7 +36,9 @@ public class QuranData {
         private Context myContext;
         private ArrayList<Character> quranCharacters ;
         private ArrayList<String> quranVerses;
+        
         //private static File quranFile = new File("/src/main/assets/quran_text.txt");
+        //Avoided this method of finding file... very messy
 
     public ArrayList<Character> getQuranCharacters() {
         return quranCharacters;
@@ -55,11 +55,11 @@ public class QuranData {
             quranCharacters = new ArrayList<>();
             quranVerses = new ArrayList<>();
 
-            InputStream ins = myContext.getResources().openRawResource(
+            InputStream inputStream = myContext.getResources().openRawResource(
                     myContext.getResources().getIdentifier("quran_text",
                             "raw", myContext.getPackageName()));
 
-            try (BufferedReader bufReader = new BufferedReader(new InputStreamReader(ins)))
+            try (BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream)))
             {
                 String verse = bufReader.readLine();
                 while (verse != null)
@@ -68,22 +68,19 @@ public class QuranData {
                         //adding the verse to a List
                         char[] charsOfCurrentVerse = verse.toCharArray();
                         List<char[]> asList = Arrays.asList(charsOfCurrentVerse);
-                        for (char c : charsOfCurrentVerse)
-                            quranCharacters.add(c);
-
-
+                        for (char c : charsOfCurrentVerse) {
+                            if (c != ' ')
+                                quranCharacters.add(c);
+                        }
                         verse = bufReader.readLine();
                     }
-
                 bufReader.close();
-
             }
             catch (FileNotFoundException e) {
                Toast.makeText(myContext, "No such file!" + e.toString(),Toast.LENGTH_LONG).show();
 
                 } catch (IOException e) {
-                e.printStackTrace();
+                Toast.makeText(myContext, "Input Error" + e.toString(),Toast.LENGTH_LONG).show();
             }
-
         }
 }
