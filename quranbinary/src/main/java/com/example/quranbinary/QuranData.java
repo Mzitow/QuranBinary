@@ -31,14 +31,22 @@ public class QuranData {
      return the versesList, its size
      should all happen in the constructor
      make sure to get context
-
      */
+
+
         private Context myContext;
         private ArrayList<Character> quranCharacters ;
         private ArrayList<String> quranVerses;
-        
+        private ArrayList<Integer> indexOfVerseHeaders;
+        private ArrayList<Integer> indexOfCharacters;
+
+
         //private static File quranFile = new File("/src/main/assets/quran_text.txt");
         //Avoided this method of finding file... very messy
+
+    public ArrayList<Integer> getIndexOfVerseHeaders() { return indexOfVerseHeaders; }
+
+    public ArrayList<Integer> getIndexOfCharacters() { return indexOfCharacters; }
 
     public ArrayList<Character> getQuranCharacters() {
         return quranCharacters;
@@ -51,7 +59,8 @@ public class QuranData {
     public QuranData(Context context)
         {
             myContext = context;
-
+            indexOfCharacters = new ArrayList<>();
+            indexOfVerseHeaders = new ArrayList<>();
             quranCharacters = new ArrayList<>();
             quranVerses = new ArrayList<>();
 
@@ -64,15 +73,19 @@ public class QuranData {
                 String verse = bufReader.readLine();
                 while (verse != null)
                     {
+                        indexOfVerseHeaders.add(quranCharacters.size());
                         quranVerses.add(verse);
                         //adding the verse to a List
                         char[] charsOfCurrentVerse = verse.toCharArray();
-                        List<char[]> asList = Arrays.asList(charsOfCurrentVerse);
+                        List<char[]> asList = Arrays.asList(charsOfCurrentVerse); //This lines has alot to say!
                         for (char c : charsOfCurrentVerse) {
-                            if (c != ' ')
+                            if (c != ' ') {
                                 quranCharacters.add(c);
+                                indexOfCharacters.add(quranCharacters.size());
+                            }
                         }
                         verse = bufReader.readLine();
+
                     }
                 bufReader.close();
             }
@@ -83,4 +96,22 @@ public class QuranData {
                 Toast.makeText(myContext, "Input Error" + e.toString(),Toast.LENGTH_LONG).show();
             }
         }
+
+    public int getVerseForCharacterIndex(int myCharchter)
+    {   //look for it in the indexOfVerseHeaders and return the index of the closest
+       Integer nearestValue = 0;
+        ArrayList<Integer> indexOFVerses  = getIndexOfVerseHeaders();
+
+       for (Integer value :indexOFVerses)
+       {
+           if ( myCharchter <= value  ) {
+               nearestValue = value;
+               break;
+           }
+
+       }
+        if (myCharchter > 330696 ) nearestValue = 330696;
+
+       return indexOFVerses.indexOf(nearestValue);
+    }
 }
